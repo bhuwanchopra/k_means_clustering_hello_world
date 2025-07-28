@@ -10,6 +10,7 @@ k_means_clustering_hello_world/
 │   └── main.py
 ├── tests/
 │   └── test_main.py
+├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
@@ -21,7 +22,7 @@ k_means_clustering_hello_world/
 You need Python 3.x and pip. Install the required packages:
 
 ```sh
-pip install numpy matplotlib pytest
+pip install -r requirements.txt
 ```
 
 ### Run
