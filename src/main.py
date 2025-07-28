@@ -15,6 +15,7 @@ def kmeans(X, n_clusters=3, n_iters=100, random_state=42):
     # Randomly choose initial centers
     indices = np.random.choice(X.shape[0], n_clusters, replace=False)
     centers = X[indices]
+    
     for _ in range(n_iters):
         # Assign clusters
         distances = np.array([euclidean_distance(X, center) for center in centers]).T
@@ -39,17 +40,31 @@ def plot_clusters(X, labels, centers):
     plt.legend()
     plt.show()
 
+def compare_kmeans(X, cluster_range=(2, 5), random_state=42):
+    plt.figure(figsize=(15, 10))
+    for i, k in enumerate(range(cluster_range[0], cluster_range[1] + 1), 1):
+        plt.subplot(2, 2, i)
+        labels, centers = kmeans(X, n_clusters=k, random_state=random_state)
+        
+        for j in range(k):
+            cluster_points = X[labels == j]
+            plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {j}')
+        plt.scatter(centers[:, 0], centers[:, 1], c='black', marker='x', s=100, label='Centers')
+        
+        plt.xlabel('Age')
+        plt.ylabel('Income')
+        plt.title(f'KMeans with {k} Clusters')
+        plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 if __name__ == "__main__":
-    people_data = generate_people_data(num_samples=100)
-    print("Random people data (age, income):")
-    print(people_data)
+    people_data = generate_people_data(num_samples=100000)
+    print("Random people data (first few rows):")
+    print(people_data[:5])
 
-    # Fit custom KMeans model
-    labels, centers = kmeans(people_data, n_clusters=3, random_state=42)
-
-    print("\nKMeans cluster labels:")
-    print(labels)
-    print("\nKMeans cluster centers (age, income):")
-    print(centers)
-
+    # Compare different numbers of clusters
+    compare_kmeans(people_data, cluster_range=(2, 5))
+    
+    plt.figure(figsize=(8, 6))
     plot_clusters(people_data, labels, centers)
