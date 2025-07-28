@@ -65,6 +65,3 @@ if __name__ == "__main__":
 
     # Compare different numbers of clusters
     compare_kmeans(people_data, cluster_range=(2, 5))
-    
-    plt.figure(figsize=(8, 6))
-    plot_clusters(people_data, labels, centers)
