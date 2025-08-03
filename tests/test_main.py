@@ -4,7 +4,7 @@ from src import main
 
 def test_generate_people_data_shape():
     data = main.generate_people_data(num_samples=50)
-    assert data.shape == (50, 2)
+    assert data.shape == (50, 4)
     assert data.dtype == np.int_
     
 def test_generate_people_data_default_ranges():
@@ -13,11 +13,17 @@ def test_generate_people_data_default_ranges():
     assert np.all((data[:, 0] >= 18) & (data[:, 0] <= 70))
     # Check income range (20000-120000)
     assert np.all((data[:, 1] >= 20000) & (data[:, 1] <= 120000))
+    # Check purchase history range (100-50000)
+    assert np.all((data[:, 2] >= 100) & (data[:, 2] < 50000))
+    # Check frequency range (1-100)
+    assert np.all((data[:, 3] >= 1) & (data[:, 3] < 100))
 
 def test_generate_people_data_ranges():
     data = main.generate_people_data(num_samples=100, age_range=(20, 30), income_range=(50000, 60000))
     assert np.all((data[:, 0] >= 20) & (data[:, 0] <= 30))
     assert np.all((data[:, 1] >= 50000) & (data[:, 1] <= 60000))
+    assert np.all((data[:, 2] >= 100) & (data[:, 2] < 50000))
+    assert np.all((data[:, 3] >= 1) & (data[:, 3] < 100))
 
 def test_euclidean_distance():
     a = np.array([[0, 0], [3, 4]])
