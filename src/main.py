@@ -28,18 +28,6 @@ def kmeans(X, n_clusters=3, n_iters=100, random_state=42):
         centers = new_centers
     return labels, centers
 
-def plot_clusters(X, labels, centers):
-    n_clusters = centers.shape[0]
-    for i in range(n_clusters):
-        cluster_points = X[labels == i]
-        plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {i}')
-    plt.scatter(centers[:, 0], centers[:, 1], c='black', marker='x', s=100, label='Centers')
-    plt.xlabel('Age')
-    plt.ylabel('Income')
-    plt.title('KMeans Clusters')
-    plt.legend()
-    plt.show()
-
 def compare_kmeans(X, cluster_range=(2, 5), random_state=42):
     plt.figure(figsize=(15, 10))
     for i, k in enumerate(range(cluster_range[0], cluster_range[1] + 1), 1):
