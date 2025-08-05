@@ -32,27 +32,34 @@ def kmeans(X, n_clusters=3, n_iters=100, random_state=42):
         centers = new_centers
     return labels, centers
 
-def compare_kmeans(X, cluster_range=(2, 5), random_state=42):
-    plt.figure(figsize=(15, 10))
 def plot_2d_clusters(X, labels, centers, title="2D Cluster Visualization"):
     plt.figure(figsize=(8, 6))
     n_clusters = len(np.unique(labels))
     colors = plt.get_cmap('tab10', n_clusters)
+    import mplcursors  # You may need to install this: pip install mplcursors
+    scatter_objs = []
     for j in range(n_clusters):
         cluster_points = X[labels == j]
-        plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {j}', color=colors(j), alpha=0.7)
+        sc = plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f'Cluster {j}', color=colors(j), alpha=0.7)
+        scatter_objs.append((sc, cluster_points))
     plt.scatter(centers[:, 0], centers[:, 1], c='black', marker='x', s=100, label='Centers')
     plt.xlabel('Age')
     plt.ylabel('Income')
     plt.title(title)
     plt.legend()
     plt.tight_layout()
+    # Add hover tooltips
+    for sc, cluster_points in scatter_objs:
+        cursor = mplcursors.cursor(sc, hover=True)
+        @cursor.connect("add")
+        def on_add(sel, points=cluster_points):
+            idx = sel.index
+            age, income, purchase, freq = points[idx]
+            sel.annotation.set(text=f"Age: {age}\nIncome: {income}\nPurchase: {purchase}\nFreq: {freq}")
     plt.show()
 
 def compare_kmeans(X, cluster_range=(2, 5), random_state=42):
-    plt.figure(figsize=(15, 10))
-    for i, k in enumerate(range(cluster_range[0], cluster_range[1] + 1), 1):
-        plt.subplot(2, 2, i)
+    for k in range(cluster_range[0], cluster_range[1] + 1):
         labels, centers = kmeans(X, n_clusters=k, random_state=random_state)
         plot_2d_clusters(X, labels, centers, title=f'KMeans with {k} Clusters (Age vs Income)')
 
@@ -62,9 +69,12 @@ def plot_3d_clusters(X, labels, centers, title="3D Cluster Visualization"):
     ax = fig.add_subplot(111, projection='3d')
     n_clusters = len(np.unique(labels))
     colors = plt.get_cmap('tab10', n_clusters)
+    import mplcursors  # You may need to install this: pip install mplcursors
+    scatter_objs = []
     for j in range(n_clusters):
         cluster_points = X[labels == j]
-        ax.scatter(cluster_points[:, 0], cluster_points[:, 1], cluster_points[:, 3], label=f'Cluster {j}', alpha=0.6, color=colors(j))
+        sc = ax.scatter(cluster_points[:, 0], cluster_points[:, 1], cluster_points[:, 3], label=f'Cluster {j}', alpha=0.6, color=colors(j))
+        scatter_objs.append((sc, cluster_points))
     ax.scatter(centers[:, 0], centers[:, 1], centers[:, 3], c='black', marker='x', s=100, label='Centers')
     ax.set_xlabel('Age')
     ax.set_ylabel('Income')
@@ -72,6 +82,14 @@ def plot_3d_clusters(X, labels, centers, title="3D Cluster Visualization"):
     ax.set_title(title)
     ax.legend()
     plt.tight_layout()
+    # Add hover tooltips
+    for sc, cluster_points in scatter_objs:
+        cursor = mplcursors.cursor(sc, hover=True)
+        @cursor.connect("add")
+        def on_add(sel, points=cluster_points):
+            idx = sel.index
+            age, income, purchase, freq = points[idx]
+            sel.annotation.set(text=f"Age: {age}\nIncome: {income}\nPurchase: {purchase}\nFreq: {freq}")
     plt.show()
 
 
@@ -100,9 +118,9 @@ if __name__ == "__main__":
     people_data = generate_people_data(num_samples=100000)
     print("Random people data (first few rows):")
     print(people_data[:5])
-    print("\nColumns: Age, Income, Purchase History, Frequency of Purchase")
     # Compare different numbers of clusters (using Age and Income for visualization)
     compare_kmeans(people_data, cluster_range=(2, 5))
 
     # Cluster and visualize high-value young adults
+    print("\nColumns: Age, Income, Purchase History, Frequency of Purchase")
     cluster_high_value_young_adults(people_data, age_range=(25, 35), high_income_threshold=100000, high_frequency_threshold=80)
