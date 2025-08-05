@@ -73,16 +73,36 @@ pip install -r requirements.txt
 
 ### Run
 
-Run the main script to see the clustering in action:
+
+## Usage
+
+Run the main script with CLI arguments to control what is plotted:
+
 ```sh
-python src/main.py
+# 2D cluster plot (default)
+python src/main.py --plot 2d
+
+# 3D interactive cluster plot (Plotly)
+python src/main.py --plot 3d
+
+# Compare clusters for k=2 to k=5
+python src/main.py --plot compare
+
+# Filter and plot only high-value young adults (customize thresholds)
+python src/main.py --plot filter --age_min 25 --age_max 35 --income_min 120000 --freq_min 90
+
+# Set number of clusters (for 2d/3d)
+python src/main.py --plot 2d --n_clusters 4
 ```
 
-This will:
-1. Generate 100,000 random data points
-2. Show a comparison of k=2 through k=5 clusters
-3. Display a detailed view of the 3-cluster solution
-4. Print cluster centers and point distribution
+### CLI Options
+
+- `--plot` (`2d`, `3d`, `compare`, `filter`): What to plot (default: `2d`)
+- `--num_samples`: Number of people to generate (default: 100000)
+- `--n_clusters`: Number of clusters for k-means (default: 3)
+- `--age_min`, `--age_max`, `--income_min`, `--freq_min`: Filtering thresholds (used with `--plot filter`)
+
+All plots are interactive. 2D plots use Matplotlib (with hover tooltips), 3D uses Plotly for advanced interactivity.
 
 ### Test
 

@@ -1,8 +1,29 @@
+import subprocess
+import sys
 import numpy as np
 import pytest
 from src import main
 
 def test_generate_people_data_shape():
+def test_cli_2d_runs():
+    result = subprocess.run([sys.executable, 'src/main.py', '--plot', '2d', '--n_clusters', '2', '--num_samples', '100'], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Random people data" in result.stdout
+
+def test_cli_3d_runs():
+    result = subprocess.run([sys.executable, 'src/main.py', '--plot', '3d', '--n_clusters', '2', '--num_samples', '100'], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Random people data" in result.stdout
+
+def test_cli_compare_runs():
+    result = subprocess.run([sys.executable, 'src/main.py', '--plot', 'compare', '--num_samples', '100'], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Random people data" in result.stdout
+
+def test_cli_filter_runs():
+    result = subprocess.run([sys.executable, 'src/main.py', '--plot', 'filter', '--age_min', '25', '--age_max', '35', '--income_min', '20000', '--freq_min', '1', '--num_samples', '100'], capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Filtered people" in result.stdout
     data = main.generate_people_data(num_samples=50)
     assert data.shape == (50, 4)
     assert data.dtype == np.int_
