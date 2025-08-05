@@ -34,13 +34,27 @@ The K-means clustering algorithm is an unsupervised learning method that partiti
 ```
 k_means_clustering_hello_world/
 ├── src/
-│   └── main.py
+│   ├── main.py         # Entry point, calls main() from cli.py
+│   ├── cli.py          # CLI argument parsing and workflow logic
+│   ├── data.py         # Data generation and filtering
+│   ├── clustering.py   # K-means and distance logic
+│   └── plotting.py     # 2D/3D plotting functions
 ├── tests/
 │   └── test_main.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
+
+**src/data.py**: Data generation and filtering functions
+
+**src/clustering.py**: K-means and distance calculation
+
+**src/plotting.py**: 2D/3D plotting (Matplotlib, Plotly)
+
+**src/cli.py**: CLI argument parsing, workflow, and main logic
+
+**src/main.py**: Thin entry point, just calls `main()` from `cli.py`
 
 ## Getting Started
 
@@ -76,33 +90,30 @@ pip install -r requirements.txt
 
 ## Usage
 
-Run the main script with CLI arguments to control what is plotted:
+
+## Usage
+
+Run the main script to visualize customer segments in a 3D interactive plot:
 
 ```sh
-# 2D cluster plot (default)
-python src/main.py --plot 2d
+python src/main.py --segments
+```
 
-# 3D interactive cluster plot (Plotly)
-python src/main.py --plot 3d
+You can also specify the number of people to generate (default: 100000):
 
-# Compare clusters for k=2 to k=5
-python src/main.py --plot compare
-
-# Filter and plot only high-value young adults (customize thresholds)
-python src/main.py --plot filter --age_min 25 --age_max 35 --income_min 120000 --freq_min 90
-
-# Set number of clusters (for 2d/3d)
-python src/main.py --plot 2d --n_clusters 4
+```sh
+python src/main.py --segments --num_samples 50000
 ```
 
 ### CLI Options
 
-- `--plot` (`2d`, `3d`, `compare`, `filter`): What to plot (default: `2d`)
+- `--segments`: Visualize three customer segments (Young Professionals, Budget Conscious, Loyal Customers) in a 3D plot
 - `--num_samples`: Number of people to generate (default: 100000)
-- `--n_clusters`: Number of clusters for k-means (default: 3)
-- `--age_min`, `--age_max`, `--income_min`, `--freq_min`: Filtering thresholds (used with `--plot filter`)
 
-All plots are interactive. 2D plots use Matplotlib (with hover tooltips), 3D uses Plotly for advanced interactivity.
+The 3D plot uses Plotly for advanced interactivity. The three segments are:
+- **Young Professionals**: Age 25-35, Income > $90,000, Frequency > 50
+- **Budget Conscious**: Income < $40,000, Frequency > 30
+- **Loyal Customers**: Frequency > 80, Purchase History > 20,000
 
 ### Test
 
