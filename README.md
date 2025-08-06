@@ -93,27 +93,42 @@ pip install -r requirements.txt
 
 ## Usage
 
+
 Run the main script to visualize customer segments in a 3D interactive plot:
 
 ```sh
-python src/main.py --segments
+python src/main.py
 ```
 
 You can also specify the number of people to generate (default: 100000):
 
 ```sh
-python src/main.py --segments --num_samples 50000
+python src/main.py --num_samples 50000
 ```
+
 
 ### CLI Options
 
-- `--segments`: Visualize three customer segments (Young Professionals, Budget Conscious, Loyal Customers) in a 3D plot
 - `--num_samples`: Number of people to generate (default: 100000)
 
+#### Young Professionals Segment
+- `--young_age_min`: Minimum age (default: 25)
+- `--young_age_max`: Maximum age (default: 35)
+- `--young_income_min`: Minimum income (default: 90000)
+- `--young_freq_min`: Minimum purchase frequency (default: 50)
+
+#### Budget Conscious Segment
+- `--budget_income_max`: Maximum income (default: 40000)
+- `--budget_freq_min`: Minimum purchase frequency (default: 30)
+
+#### Loyal Customers Segment
+- `--loyal_freq_min`: Minimum purchase frequency (default: 80)
+- `--loyal_purchase_min`: Minimum purchase history (default: 20000)
+
 The 3D plot uses Plotly for advanced interactivity. The three segments are:
-- **Young Professionals**: Age 25-35, Income > $90,000, Frequency > 50
-- **Budget Conscious**: Income < $40,000, Frequency > 30
-- **Loyal Customers**: Frequency > 80, Purchase History > 20,000
+- **Young Professionals**: Age between `--young_age_min` and `--young_age_max`, Income >= `--young_income_min`, Frequency >= `--young_freq_min`
+- **Budget Conscious**: Income <= `--budget_income_max`, Frequency >= `--budget_freq_min`
+- **Loyal Customers**: Frequency >= `--loyal_freq_min`, Purchase History >= `--loyal_purchase_min`
 
 ### Test
 
