@@ -180,6 +180,10 @@ The test suite covers:
 - Age on x-axis, Income on y-axis
 - Comprehensive legend and labels
 
+## Acknowledgement
+
+This code was generated with the assistance of GitHub Copilot.
+
 ## License
 
 MIT
